@@ -1,8 +1,7 @@
 import UIKit
 
-public protocol Displayable {}
-
 public protocol Configurable: AnyObject {
+    associatedtype Displayable
     func configure(with displayable: Displayable)
 }
 
@@ -61,7 +60,7 @@ public extension UITableViewCell {
         }
     }
     
-    func configureContentView<T>(_ type: T.Type, with displayable: Displayable) where T: UIView & Configurable {
+    func configureContentView<T>(_ type: T.Type, with displayable: T.Displayable) where T: UIView & Configurable {
         let contentView = self.contentView(T.self)
         contentView.configure(with: displayable)
     }
@@ -82,7 +81,7 @@ public extension UICollectionViewCell {
         }
     }
     
-    func configureContentView<T>(_ type: T.Type, with displayable: Displayable) where T: UIView & Configurable {
+    func configureContentView<T>(_ type: T.Type, with displayable: T.Displayable) where T: UIView & Configurable {
         let contentView = self.contentView(T.self)
         contentView.configure(with: displayable)
     }

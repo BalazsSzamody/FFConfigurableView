@@ -53,7 +53,7 @@ extension TestItem: TestDisplayable {
     }
 }
 
-protocol TestDisplayable: Displayable {
+protocol TestDisplayable {
     var id: String { get }
     var testTitle: String? { get }
     var testText: String? { get }
@@ -61,6 +61,7 @@ protocol TestDisplayable: Displayable {
 }
 
 class TestView: UIView, Configurable {
+    typealias Displayable = TestDisplayable
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var stackView: UIStackView!
@@ -72,10 +73,6 @@ class TestView: UIView, Configurable {
     }
     
     func configure(with displayable: Displayable) {
-        guard let displayable = displayable as? TestDisplayable else {
-            preconditionFailure("Use the correct displayable: TestDisplayable")
-        }
-        
         data = displayable
     }
     
