@@ -3,7 +3,7 @@ import UIKit
 import Configurable
 
 final class FFConfigurableViewTests: XCTestCase {
-    func testExample() {
+    func testView() {
         let testView = TestView.fromNib()
         let data = TestItem()
         
@@ -16,9 +16,18 @@ final class FFConfigurableViewTests: XCTestCase {
         XCTAssertEqual(testView.textLabel.text, expectedText)
         XCTAssertEqual(testView.backgroundColor, expectedColor)
     }
-
+    
+    func testTableView() {
+        let tableView = UITableView()
+        tableView.register(type: TestView.self)
+        
+        let data = TestItem()
+        
+        let cell = tableView.dequeuReusableCell(forType: TestView.self, for: IndexPath(row: 0, section: 0))
+        cell.configureContentView(TestView.self, with: data)
+    }
     static var allTests = [
-        ("testExample", testExample),
+        ("testView", testView),
     ]
 }
 
