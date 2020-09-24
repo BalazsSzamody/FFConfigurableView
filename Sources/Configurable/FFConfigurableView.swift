@@ -7,9 +7,9 @@ public protocol Configurable: AnyObject {
 }
 
 public extension UIView {
-    static func fromNib() -> Self {
-        guard let view = UINib(nibName: String(describing: Self.self), bundle: nil)
-                .instantiate(withOwner: nil, options: nil)[0] as? Self else {
+    static func fromNib(_ nibName: String? = nil, positionInNib position: Int = 0) -> Self {
+        guard let view = UINib(nibName: nibName ?? String(describing: Self.self), bundle: nil)
+                .instantiate(withOwner: nil, options: nil)[position] as? Self else {
             preconditionFailure("Nib object instantiaton or cast failed, check the '.xib' file")
         }
         
@@ -47,6 +47,27 @@ public extension UITableView {
 }
 
 public extension UITableViewCell {
+    func contentView<T>(_ type: T.Type) -> T where T: UIView {
+        if let view = subviews.first as? T {
+            return view
+        } else {
+            subviews
+                .forEach({ $0.removeFromSuperview() })
+            let view = T.fromNib()
+            addSubviewWithConstraints(view)
+            setNeedsLayout()
+            layoutIfNeeded()
+            return view
+        }
+    }
+    
+    func configureContentView<T>(_ type: T.Type, with displayable: Displayable) where T: UIView & Configurable {
+        let contentView = self.contentView(T.self)
+        contentView.configure(with: displayable)
+    }
+}
+
+public extension UICollectionViewCell {
     func contentView<T>(_ type: T.Type) -> T where T: UIView {
         if let view = subviews.first as? T {
             return view
