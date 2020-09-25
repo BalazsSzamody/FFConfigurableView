@@ -6,8 +6,8 @@ public protocol Configurable: AnyObject {
 }
 
 public extension UIView {
-    static func fromNib(_ nibName: String? = nil, positionInNib position: Int = 0) -> Self {
-        guard let view = UINib(nibName: nibName ?? String(describing: Self.self), bundle: nil)
+    static func fromNib(_ nibName: String? = nil, positionInNib position: Int = 0, bundle: Bundle? = nil) -> Self {
+        guard let view = UINib(nibName: nibName ?? String(describing: Self.self), bundle: bundle ?? Bundle(for: Self.self))
                 .instantiate(withOwner: nil, options: nil)[position] as? Self else {
             preconditionFailure("Nib object instantiaton or cast failed, check the '.xib' file")
         }
