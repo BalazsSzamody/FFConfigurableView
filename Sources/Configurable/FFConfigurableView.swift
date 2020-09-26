@@ -45,7 +45,7 @@ public extension UITableView {
     }
 }
 
-public extension UITableViewCell {
+public extension UIView {
     func contentView<T>(_ type: T.Type) -> T where T: UIView {
         if let view = subviews.first as? T {
             return view
@@ -60,28 +60,12 @@ public extension UITableViewCell {
         }
     }
     
-    func configureContentView<T>(_ type: T.Type, with displayable: T.Displayable) where T: UIView & Configurable {
-        let contentView = self.contentView(T.self)
-        contentView.configure(with: displayable)
-    }
-}
-
-public extension UICollectionViewCell {
-    func contentView<T>(_ type: T.Type) -> T where T: UIView {
-        if let view = subviews.first as? T {
-            return view
-        } else {
-            subviews
-                .forEach({ $0.removeFromSuperview() })
-            let view = T.fromNib()
-            addSubviewWithConstraints(view)
-            setNeedsLayout()
-            layoutIfNeeded()
-            return view
-        }
+    func contentView<T>() -> T where T: UIView {
+        contentView(T.self)
     }
     
     func configureContentView<T>(_ type: T.Type, with displayable: T.Displayable) where T: UIView & Configurable {
+        self.backgroundColor = .clear
         let contentView = self.contentView(T.self)
         contentView.configure(with: displayable)
     }
